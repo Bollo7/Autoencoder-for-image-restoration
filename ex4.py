@@ -33,4 +33,6 @@ def ex4(image_array, crop_size, crop_center):
 	crop_array[crop_center[0]:crop_center[0] + target_array.shape[0],
 	crop_center[1]:crop_center[1] + target_array.shape[1]] += ones_pad
 
-	return (img, crop_array, target_array)
+	image_array = img
+
+	return (image_array, crop_array, target_array)
