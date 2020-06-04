@@ -11,12 +11,6 @@ def ex4(image_array, crop_size, crop_center):
 		raise ValueError('invalid amount of values')
 	if crop_size[0] % 2 == 0 or crop_size[1] % 2 == 0:
 		raise ValueError('crop_size values should be odd!')
-	border_x = image_array.shape[0] - (crop_center[0] + crop_size[0])
-	border_y = image_array.shape[1] - (crop_center[1] + crop_size[1])
-	if border_x < 20:
-		raise ValueError('minimal distance between crop and border x is less than 20')
-	if border_y < 20:
-		raise ValueError('minimal distance between crop and border y is less than 20')
 
 	img = image_array.copy()
 
@@ -26,6 +20,17 @@ def ex4(image_array, crop_size, crop_center):
 	center_x = round(crop_center[0] + (crop_size[0]+1)/2)
 	size_y = round(crop_center[1] - (crop_size[1]-1)/2)
 	center_y = round(crop_center[1] + (crop_size[1]+1)/2)
+
+	border_right = size_y
+	border_left = size_x
+	border_up = image_array.shape[0] - center_y
+	border_down = image_array.shape[1] - center_x
+
+	if border_right < 20 or border_left < 20:
+		raise ValueError('minimal distance between crop and border is less than 20')
+	if border_up < 20 or border_down < 20:
+		raise ValueError('minimal distance between crop and border is less than 20')
+
 
 	target_array = image_array[size_x:center_x, size_y:center_y]
 
