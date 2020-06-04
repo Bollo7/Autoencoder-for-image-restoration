@@ -18,20 +18,23 @@ def ex4(image_array, crop_size, crop_center):
 	if border_y < 20:
 		raise ValueError('minimal distance between crop and border y is less than 20')
 
-	img = image_array.clone()
+	img = image_array.copy()
 
 	crop_array = np.zeros_like(image_array)
-	target_array = image_array[crop_center[0]: crop_center[0] + crop_size[0],
-	               crop_center[1]:crop_center[1] + crop_size[1]]
+
+	size_x =  round(crop_center[0] - (crop_size[0]-1)/2)
+	center_x = round(crop_center[0] + (crop_size[0]+1)/2)
+	size_y = round(crop_center[1] - (crop_size[1]-1)/2)
+	center_y = round(crop_center[1] + (crop_size[1]+1)/2)
+
+	target_array = image_array[size_x:center_x, size_y:center_y]
 
 	pad = np.negative(target_array)
 	ones_pad = np.ones_like(target_array)
 
-	img[crop_center[0]:crop_center[0] + target_array.shape[0],
-	crop_center[1]:crop_center[1] + target_array.shape[1]] += pad
+	img[size_x:center_x, size_y:center_y] += pad
 
-	crop_array[crop_center[0]:crop_center[0] + target_array.shape[0],
-	crop_center[1]:crop_center[1] + target_array.shape[1]] += ones_pad
+	crop_array[size_x:center_x, size_y:center_y] += ones_pad
 
 	image_array = img
 
