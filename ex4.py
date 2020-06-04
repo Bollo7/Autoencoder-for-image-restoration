@@ -1,3 +1,10 @@
+"""
+ex4.py
+Author: Nikita Kolesnichenko
+Matr.Nr.: 11778609
+Exercise 4
+"""
+
 import numpy as np
 from PIL import Image
 
