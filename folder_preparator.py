@@ -1,9 +1,12 @@
 """
-ex4.py
 Author: Nikita Kolesnichenko
 Matr.Nr.: 11778609
-Exercise 4
+Folder preparator
 """
+'''
+Script takes the unprocessed files from subfolders, resizes, then crops the images and 
+saves different types of image into separate folders: cropped part (target), cropped image, real image.
+'''
 
 import numpy as np
 from PIL import Image
@@ -20,7 +23,7 @@ def renamer(output_dir):
 		#new_path = os.path.join(output_dir, new_filename)
 		os.rename(old_filename, new_filename)
 
-def ex4(image_array, crop_size, crop_center):
+def cropper(image_array, crop_size, crop_center):
 	if type(image_array) != np.ndarray:
 		raise ValueError('not a numpy array')
 	if type(crop_size) != tuple or type(crop_center) != tuple:
@@ -75,16 +78,16 @@ except:
 
 def prepare_folders(root = root, dir_to_crops = 'output/crops',
                    dir_to_masks = 'output/masks', crop_img_dir = 'output/cropped_imgs',
-                   real_img_dir = 'output/real_imgs'):
+                   real_img_dir = 'output/real_imgs', resizing_size = (100, 100)):
 
 	for enum, f in enumerate(sorted(glob(os.path.join(root, '**/*.*'), recursive=True))):
 		crop_out_size = (random.randrange(5, 21, 2), random.randrange(5, 21, 2))
 		crop_out_center = (random.randrange(35, 65), random.randrange(35, 65))
 		img = Image.open(f)
-		img = img.resize((100, 100))
+		img = img.resize(resizing_size)
 		img_copy = img.copy()
 		array = np.asarray(img)
-		img, crop, target = ex4(array, crop_out_size, crop_out_center)
+		img, crop, target = cropper(array, crop_out_size, crop_out_center)
 
 		img_copy.save(real_img_dir + f'/real_{enum}.jpg')
 		Image.fromarray(img).save(crop_img_dir + f'/cropped_{enum}.jpg')
