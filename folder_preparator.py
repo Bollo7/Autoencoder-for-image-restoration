@@ -3,9 +3,10 @@ Author: Nikita Kolesnichenko
 Matr.Nr.: 11778609
 Folder preparator
 """
+
 '''
-Script takes the unprocessed files from subfolders, resizes, then crops the images and 
-saves different types of image into separate folders: cropped part (target), cropped image, real image.
+Script takes the unprocessed files from subfolders that contain readily checked images, resizes, then crops the images and 
+saves cropped part (target), cropped image and real image into separate folders.
 '''
 
 import numpy as np
@@ -69,7 +70,7 @@ def cropper(image_array, crop_size, crop_center):
 root = 'data'
 try:
 	os.makedirs('output/crops')
-	os.mkdir('output/masks')
+	os.mkdir('output/targets')
 	os.mkdir('output/cropped_imgs')
 	os.mkdir('output/real_imgs')
 except:
@@ -77,7 +78,7 @@ except:
 
 
 def prepare_folders(root = root, dir_to_crops = 'output/crops',
-                   dir_to_masks = 'output/masks', crop_img_dir = 'output/cropped_imgs',
+                   dir_to_masks = 'output/targets', crop_img_dir = 'output/cropped_imgs',
                    real_img_dir = 'output/real_imgs', resizing_size = (100, 100)):
 
 	for enum, f in enumerate(sorted(glob(os.path.join(root, '**/*.*'), recursive=True))):
