@@ -15,10 +15,11 @@ class DataSet(torch.utils.data.Dataset):
 	"""
 	def __init__(self):
 		#super(DataSet, self).__init__()
-		self.paths = glob('data/**/*.jpg', recursive=True)
+		self.paths = glob('outputs/*.jpg', recursive=True)
 
 	def __getitem__(self, index):
 		img = Image.open(self.paths[index])
+
 		return img
 
 	def __len__(self):
@@ -43,9 +44,9 @@ class Rotation(DataSet):
 		if self.transform_chain is not None:
 			image = self.transform_chain
 
-		rotated_data = TF.rotate(image, angle=self.angle)
-		image = TF.resized_crop(image, i=8, j=8, h=16, w=16, size=32)
-		rotated_data = TF.resized_crop(rotated_data, i=8, j=8, h=16, w=16, size=32)
+		rotated_data = TF.rotate(image, angle=self.angle, resample=Image.BILINEAR)
+		image = TF.resized_crop(image, i=8, j=8, h=16, w=16, size=70)
+		rotated_data = TF.resized_crop(rotated_data, i=8, j=8, h=16, w=16, size=70)
 		image = np.asarray(image, dtype=np.float32)
 		rotated_data = np.asarray(rotated_data, dtype=np.float32)
 		mean = image.mean()
@@ -64,9 +65,3 @@ class Rotation(DataSet):
 		rotated_data = TF.to_tensor(rotated_data)
 
 		return full_inp, rotated_data, idx
-
-
-dd = DataSet()
-rot = Rotation(dd)
-
-

@@ -7,7 +7,18 @@ Exercise 4
 
 import numpy as np
 from PIL import Image
+import random
+import os
+from glob import glob
 
+def renamer(output_dir):
+	for num, file in enumerate(os.listdir(output_dir)):
+		oldext = os.path.splitext(file)[1]
+		new_filename = str(num +1).zfill(6) + oldext
+		new_filename = os.path.join(output_dir, new_filename)
+		old_filename = os.path.join(output_dir, file)
+		#new_path = os.path.join(output_dir, new_filename)
+		os.rename(old_filename, new_filename)
 
 def ex4(image_array, crop_size, crop_center):
 	if type(image_array) != np.ndarray:
@@ -51,3 +62,34 @@ def ex4(image_array, crop_size, crop_center):
 	image_array = img
 
 	return (image_array, crop_array, target_array)
+
+root = 'data'
+try:
+	os.makedirs('output/crops')
+	os.mkdir('output/masks')
+	os.mkdir('output/cropped_imgs')
+	os.mkdir('output/real_imgs')
+except:
+	pass
+
+
+def prepare_folders(root = root, dir_to_crops = 'output/crops',
+                   dir_to_masks = 'output/masks', crop_img_dir = 'output/cropped_imgs',
+                   real_img_dir = 'output/real_imgs'):
+
+	for enum, f in enumerate(sorted(glob(os.path.join(root, '**/*.*'), recursive=True))):
+		crop_out_size = (random.randrange(5, 21, 2), random.randrange(5, 21, 2))
+		crop_out_center = (random.randrange(35, 65), random.randrange(35, 65))
+		img = Image.open(f)
+		img = img.resize((100, 100))
+		img_copy = img.copy()
+		array = np.asarray(img)
+		img, crop, target = ex4(array, crop_out_size, crop_out_center)
+
+		img_copy.save(real_img_dir + f'/real_{enum}.jpg')
+		Image.fromarray(img).save(crop_img_dir + f'/cropped_{enum}.jpg')
+		Image.fromarray(crop).save(dir_to_crops + f'/crop_{enum}.jpg')
+		Image.fromarray(target).save(dir_to_masks + f'/target_{enum}.jpg')
+
+
+prepare_folders()
