@@ -1,4 +1,4 @@
-# Autoencoder-for-image-restoration - learning project
+# Autoencoder-for-image-restoration - PyTorch project
 
 Autoencoders are great for feature learning and good fit for restoration of missing parts of the image. This project was made from scratch and is a part of subject at my university.
 
