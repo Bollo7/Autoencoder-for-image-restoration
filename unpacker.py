@@ -63,7 +63,7 @@ def image(input_dir, output_dir, logfile):
 
 		if hasher(output_dir, file, logfile, abspath) == True:
 			shutil.copy(file, new_path)
-			#renamer(output_dir)
+			renamer(output_dir)
 
 	logfile.close()
 	return len(os.listdir(output_dir))

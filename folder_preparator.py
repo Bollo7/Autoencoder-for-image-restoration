@@ -15,14 +15,6 @@ import random
 import os
 from glob import glob
 
-def renamer(output_dir):
-	for num, file in enumerate(os.listdir(output_dir)):
-		oldext = os.path.splitext(file)[1]
-		new_filename = str(num +1).zfill(6) + oldext
-		new_filename = os.path.join(output_dir, new_filename)
-		old_filename = os.path.join(output_dir, file)
-		#new_path = os.path.join(output_dir, new_filename)
-		os.rename(old_filename, new_filename)
 
 def cropper(image_array, crop_size, crop_center):
 	if type(image_array) != np.ndarray:
@@ -48,20 +40,20 @@ def cropper(image_array, crop_size, crop_center):
 	border_up = image_array.shape[0] - center_y
 	border_down = image_array.shape[1] - center_x
 
-	if border_right < 20 or border_left < 20:
-		raise ValueError('minimal distance between crop and border is less than 20')
-	if border_up < 20 or border_down < 20:
-		raise ValueError('minimal distance between crop and border is less than 20')
+	# if border_right < 20 or border_left < 20:
+	# 	raise ValueError('minimal distance between crop and border is less than 20')
+	# if border_up < 20 or border_down < 20:
+	# 	raise ValueError('minimal distance between crop and border is less than 20')
 
 
-	target_array = image_array[size_x:center_x, size_y:center_y]
+	target_array = image_array[int(size_x):int(center_x), int(size_y):int(center_y)]
 
 	pad = np.negative(target_array)
 	ones_pad = np.ones_like(target_array)
 
-	img[size_x:center_x, size_y:center_y] += pad
+	img[int(size_x):int(center_x), int(size_y):int(center_y)] += pad
 
-	crop_array[size_x:center_x, size_y:center_y] += ones_pad
+	crop_array[int(size_x):int(center_x), int(size_y):int(center_y)] += ones_pad
 
 	image_array = img
 
@@ -94,6 +86,3 @@ def prepare_folders(root = root, dir_to_crops = 'output/crops',
 		Image.fromarray(img).save(crop_img_dir + f'/cropped_{enum}.jpg')
 		Image.fromarray(crop).save(dir_to_crops + f'/crop_{enum}.jpg')
 		Image.fromarray(target).save(dir_to_masks + f'/target_{enum}.jpg')
-
-
-prepare_folders()
